@@ -101,7 +101,7 @@ Alternatively, turning on evalcv will perform 10-fold CV on the training set, an
 
 ## Binary classification benchmarks
 
-The file eval_classification.py is used for evaluation on the binary classification tasks (MR, CR, SUBJ and MPQA). You can download these datasets from http://nlp.stanford.edu/~sidaw/home/projects:nbsvm . Included is a function for nested cross-validation, since it is standard practice to report 10-fold CV on these datasets. Here is sample usage:
+The file eval_classification.py is used for evaluation on the binary classification tasks (MR, CR, SUBJ and MPQA). You can download CR and MPQA from http://nlp.stanford.edu/~sidaw/home/projects:nbsvm and MR and SUBJ from https://www.cs.cornell.edu/people/pabo/movie-review-data/ (sentence polarity dataset, subjectivity dataset). Included is a function for nested cross-validation, since it is standard practice to report 10-fold CV on these datasets. Here is sample usage:
 
     import eval_classification
     eval_classification.eval_nested_kfold(model, 'SUBJ', use_nb=False)
