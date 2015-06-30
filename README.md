@@ -10,7 +10,7 @@ This code is written in python. To use it you will need:
 * Theano 0.7
 * A recent version of [NumPy](http://www.numpy.org/) and [SciPy](http://www.scipy.org/)
 * [scikit-learn](http://scikit-learn.org/stable/index.html)
-* [NLTK](http://www.nltk.org/)
+* [NLTK 3](http://www.nltk.org/)
 * [Keras](https://github.com/fchollet/keras) (for Semantic-Relatedness experiments only)
 
 ## Getting started
@@ -24,6 +24,8 @@ You will first need to download the model files and word embeddings. The embeddi
     wget http://www.cs.toronto.edu/~rkiros/models/uni_skip.npz.pkl
     wget http://www.cs.toronto.edu/~rkiros/models/bi_skip.npz
     wget http://www.cs.toronto.edu/~rkiros/models/bi_skip.npz.pkl
+
+NOTE to Toronto users: You should be able to run the code as is from any machine, without having to download.
 
 Once these are downloaded, open skipthoughts.py and set the paths to the above files (path_to_models and path_to_tables). Now you are ready to go. Make sure to set the THEANO_FLAGS device if you want to use CPU or GPU.
 
