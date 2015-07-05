@@ -127,4 +127,4 @@ Ryan Kiros, Yukun Zhu, Ruslan Salakhutdinov, Richard S. Zemel, Antonio Torralba,
 
 ## License
 
-(TBD)
+[Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
