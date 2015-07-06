@@ -36,7 +36,7 @@ Open up IPython and run the following:
 
 Now suppose you have a list of sentences X, where each entry is a string that you would like to encode. To get vectors, just run the following:
 
-    vectors = skipthoughts.encode(X)
+    vectors = skipthoughts.encode(model, X)
 
 vectors is a numpy array with as many rows as the length of X, and each row is 4800 dimensional (combine-skip model, from the paper). The first 2400 dimensions is the uni-skip model, and the last 2400 is the bi-skip model. We highly recommend using the combine-skip vectors, as they are almost universally the best performing in the paper experiments.
 
