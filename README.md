@@ -1,6 +1,6 @@
 # skip-thoughts
 
-Sent2Vec encoder from the paper [Skip-Thought Vectors](http://arxiv.org/abs/1506.06726). The training code and data will be released at a later date.
+Sent2Vec encoder from the paper [Skip-Thought Vectors](http://arxiv.org/abs/1506.06726). The training code will be released at a later date.
 
 ## Dependencies
 
@@ -112,6 +112,10 @@ This will apply nested CV on the SUBJ dataset without NB features. The dataset n
 
 By default the EOS token is not used when encoding, even though it was used in training. We found that this results in slightly better performance across all tasks, assuming the sentences end with proper puctuation. If this is not the case, we highly recommend using the EOS token (which can be applied with use_eos=True in the encode function). For example, the semantic-relatedness sentences have been stripped of periods, so we used the EOS token in those experiments. If ever in doubt, consider it as an extra hyperparameter.
 
+## BookCorpus data
+
+The pre-processed dataset we used for training our model is now available [here](http://www.cs.toronto.edu/~mbweb/).
+
 ## Reference
 
 If you found this code useful, please cite the following paper:
@@ -123,6 +127,18 @@ Ryan Kiros, Yukun Zhu, Ruslan Salakhutdinov, Richard S. Zemel, Antonio Torralba,
       author={Kiros, Ryan and Zhu, Yukun and Salakhutdinov, Ruslan and Zemel, Richard S and Torralba, Antonio and Urtasun, Raquel and Fidler, Sanja},
       journal={arXiv preprint arXiv:1506.06726},
       year={2015}
+    }
+
+If you use the BookCorpus data in your work, please also cite:
+
+Yukun Zhu, Ryan Kiros, Richard Zemel, Ruslan Salakhutdinov, Raquel Urtasun, Antonio Torralba, Sanja Fidler.
+**"Aligning Books and Movies: Towards Story-like Visual Explanations by Watching Movies and Reading Books."** *arXiv preprint arXiv:1506.06724 (2015).*
+
+    @article{zhu2015aligning,
+        title={Aligning Books and Movies: Towards Story-like Visual Explanations by Watching Movies and Reading Books},
+        author={Zhu, Yukun and Kiros, Ryan and Zemel, Richard and Salakhutdinov, Ruslan and Urtasun, Raquel and Torralba, Antonio and Fidler, Sanja},
+        journal={arXiv preprint arXiv:1506.06724},
+        year={2015}
     }
 
 ## License
