@@ -1,6 +1,8 @@
 # skip-thoughts
 
-Sent2Vec encoder from the paper [Skip-Thought Vectors](http://arxiv.org/abs/1506.06726). The training code will be released at a later date.
+Sent2Vec encoder from the paper [Skip-Thought Vectors](http://arxiv.org/abs/1506.06726).
+
+The training code (+vocab expansion) will be released in September. I will also be releasing code for decoding, dimensionality reduction and mapping skip-thought vectors to binary codes. Pre-trained models for these will also be made available.
 
 ## Dependencies
 
