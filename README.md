@@ -12,6 +12,7 @@ This code is written in python. To use it you will need:
 * [scikit-learn](http://scikit-learn.org/stable/index.html)
 * [NLTK 3](http://www.nltk.org/)
 * [Keras](https://github.com/fchollet/keras) (for Semantic-Relatedness experiments only)
+* [gensim](https://radimrehurek.com/gensim/) (for vocabulary expansion when training new models)
 
 ## Getting started
 
