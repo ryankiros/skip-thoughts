@@ -11,14 +11,17 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from utils import _p, ortho_weight, norm_weight, tanh, relu
 from layers import get_layer, param_init_fflayer, fflayer, param_init_gru, gru_layer
 
-def init_params(options):
+def init_params(options, preemb=None):
     """
     Initialize all parameters
     """
     params = OrderedDict()
 
     # Word embedding
-    params['Wemb'] = norm_weight(options['n_words'], options['dim_word'])
+    if preemb == None:
+        params['Wemb'] = norm_weight(options['n_words'], options['dim_word'])
+    else:
+        params['Wemb'] = preemb
 
     # init state
     params = get_layer('ff')[0](options, params, prefix='ff_state', nin=options['dimctx'], nout=options['dim'])
@@ -28,7 +31,11 @@ def init_params(options):
                                               nin=options['dim_word'], dim=options['dim'])
 
     # Output layer
-    params = get_layer('ff')[0](options, params, prefix='ff_logit', nin=options['dim'], nout=options['n_words'])
+    if options['doutput']:
+        params = get_layer('ff')[0](options, params, prefix='ff_hid', nin=options['dim'], nout=options['dim_word'])
+        params = get_layer('ff')[0](options, params, prefix='ff_logit', nin=options['dim_word'], nout=options['n_words'])
+    else:
+        params = get_layer('ff')[0](options, params, prefix='ff_logit', nin=options['dim'], nout=options['n_words'])
 
     return params
 
@@ -63,7 +70,11 @@ def build_model(tparams, options):
                                             mask=mask)
 
     # Compute word probabilities
-    logit = get_layer('ff')[1](tparams, proj[0], options, prefix='ff_logit', activ='linear')
+    if options['doutput']:
+        hid = get_layer('ff')[1](tparams, proj[0], options, prefix='ff_hid', activ='tanh')
+        logit = get_layer('ff')[1](tparams, hid, options, prefix='ff_logit', activ='linear')
+    else:
+        logit = get_layer('ff')[1](tparams, proj[0], options, prefix='ff_logit', activ='linear')
     logit_shp = logit.shape
     probs = tensor.nnet.softmax(logit.reshape([logit_shp[0]*logit_shp[1], logit_shp[2]]))
 
@@ -104,7 +115,11 @@ def build_sampler(tparams, options, trng):
     next_state = proj[0]
 
     # output
-    logit = get_layer('ff')[1](tparams, next_state, options, prefix='ff_logit', activ='linear')
+    if options['doutput']:
+        hid = get_layer('ff')[1](tparams, next_state, options, prefix='ff_hid', activ='tanh')
+        logit = get_layer('ff')[1](tparams, hid, options, prefix='ff_logit', activ='linear')
+    else:
+        logit = get_layer('ff')[1](tparams, next_state, options, prefix='ff_logit', activ='linear')
     next_probs = tensor.nnet.softmax(logit)
     next_sample = trng.multinomial(pvals=next_probs).argmax(1)
 

@@ -16,6 +16,7 @@ import time
 import homogeneous_data
 
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+from collections import defaultdict
 
 from utils import *
 from layers import get_layer, param_init_fflayer, fflayer, param_init_gru, gru_layer
@@ -31,6 +32,7 @@ def trainer(X, C, stmodel,
             dim=1600, # the number of GRU units
             encoder='gru',
             decoder='gru',
+            doutput=False,
             max_epochs=5,
             dispFreq=1,
             decay_c=0.,
@@ -41,6 +43,7 @@ def trainer(X, C, stmodel,
             batch_size = 16,
             saveto='/u/rkiros/research/semhash/models/toy.npz',
             dictionary='/ais/gobi3/u/rkiros/bookgen/book_dictionary_large.pkl',
+            embeddings=None,
             saveFreq=1000,
             sampleFreq=100,
             reload_=False):
@@ -52,6 +55,7 @@ def trainer(X, C, stmodel,
     model_options['dim'] = dim
     model_options['encoder'] = encoder
     model_options['decoder'] = decoder
+    model_options['doutput'] = doutput
     model_options['max_epochs'] = max_epochs
     model_options['dispFreq'] = dispFreq
     model_options['decay_c'] = decay_c
@@ -62,6 +66,7 @@ def trainer(X, C, stmodel,
     model_options['batch_size'] = batch_size
     model_options['saveto'] = saveto
     model_options['dictionary'] = dictionary
+    model_options['embeddings'] = embeddings
     model_options['saveFreq'] = saveFreq
     model_options['sampleFreq'] = sampleFreq
     model_options['reload_'] = reload_
@@ -78,6 +83,23 @@ def trainer(X, C, stmodel,
     print 'Loading dictionary...'
     worddict = load_dictionary(dictionary)
 
+    # Load pre-trained embeddings, if applicable
+    if embeddings != None:
+        print 'Loading embeddings...'
+        with open(embeddings, 'rb') as f:
+            embed_map = pkl.load(f)
+        dim_word = len(embed_map.values()[0])
+        model_options['dim_word'] = dim_word
+        preemb = norm_weight(n_words, dim_word)
+        pz = defaultdict(lambda : 0)
+        for w in embed_map.keys():
+            pz[w] = 1
+        for w in worddict.keys()[:n_words-2]:
+            if pz[w] > 0:
+                preemb[worddict[w]] = embed_map[w]
+    else:
+        preemb = None
+
     # Inverse dictionary
     word_idict = dict()
     for kk, vv in worddict.iteritems():
@@ -86,7 +108,7 @@ def trainer(X, C, stmodel,
     word_idict[1] = 'UNK'
 
     print 'Building model'
-    params = init_params(model_options)
+    params = init_params(model_options, preemb=preemb)
     # reload parameters
     if reload_ and os.path.exists(saveto):
         params = load_params(saveto, params)
