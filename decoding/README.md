@@ -40,7 +40,7 @@ Open train.py with your favourite editor. The trainer functions contains a numbe
 * batch_size: size of each training minibatch (roughly)
 * saveto: a path where the model will be periodically saved
 * dictionary: where the dictionary is. Set this to where you saved in Step 1
-* embeddings: a dictionary of pre-trained wordvecs (keys are words, values are vectors). Otherwise None
+* embeddings: path to dictionary of pre-trained wordvecs (keys are words, values are vectors). Otherwise None
 * saveFreq: save the model after this many weight updates
 * sampleFreq: how often to show samples from the model
 * reload_: whether to reload a previously saved model
