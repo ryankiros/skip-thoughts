@@ -29,6 +29,7 @@ Open train.py with your favourite editor. The trainer functions contains a numbe
 * dim_word: the dimensionality of the RNN word embeddings
 * dim: the size of the hidden state
 * decoder: the type of decoder function. Only supports 'gru' at the moment
+* doutput: whether to use a deep output layer
 * max_epochs: the total number of training epochs
 * displayFreq: display progress after this many weight updates
 * decay_c: weight decay hyperparameter
@@ -39,11 +40,12 @@ Open train.py with your favourite editor. The trainer functions contains a numbe
 * batch_size: size of each training minibatch (roughly)
 * saveto: a path where the model will be periodically saved
 * dictionary: where the dictionary is. Set this to where you saved in Step 1
+* embeddings: a dictionary of pre-trained wordvecs (keys are words, values are vectors). Otherwise None
 * saveFreq: save the model after this many weight updates
 * sampleFreq: how often to show samples from the model
 * reload_: whether to reload a previously saved model
 
-At the moment, only 1 layer models are supported. Additional functionality may be added in the future.
+At the moment, only 1 recurrent layer is supported. Additional functionality may be added in the future.
 
 ### Step 3: Load a pre-trained skip-thoughts model
 
@@ -103,6 +105,8 @@ This will generate a sentence, conditioned on vec, using greedy decoding. If sto
 I included a theano function f_log_probs in train.py which can be used for monitoring the cost on held-out data. On BookCorpus, one pass through the dataset (70 million sentences) should be good enough for very accurate decoding.
 
 In layers.py, you can create additional types of layers to replace gru. It is just a matter of following the template of the existing layers.
+
+Consider initializing with pre-trained word vectors. This helps get training off the ground faster.
 
 In theory you can also backprop through the skip-thoughts encoder. The code currently doesn't support this though.
 
