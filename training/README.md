@@ -4,6 +4,8 @@ This document will describe how to train new models from scratch.
 
 ## Getting started
 
+NOTE: Make sure you have 'floatX=float32' set in your Theano flags, otherwise you may encounter a TypeError.
+
 Suppose that you have a list of strings available for training, where the contents of the entries are contiguous (so the (i+1)th entry is the sentence that follows the i-th entry. As an example, you can download our [BookCorpus](http://www.cs.toronto.edu/~mbweb/) dataset, which was used for training the models available on the main page. Lets call this list X. Note that each string should already be tokenized (so that split() will return the desired tokens).
 
 ### Step 1: Create a dictionary
