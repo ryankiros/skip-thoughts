@@ -87,6 +87,21 @@ def load_tables():
     return utable, btable
 
 
+class Encoder(object):
+    """
+    Sentence encoder.
+    """
+
+    def __init__(self, model):
+      self._model = model
+
+    def encode(self, X, use_norm=True, verbose=True, batch_size=128, use_eos=False):
+      """
+      Encode sentences in the list X. Each entry will return a vector
+      """
+      return encode(self._model, X, use_norm, verbose, batch_size, use_eos)
+
+
 def encode(model, X, use_norm=True, verbose=True, batch_size=128, use_eos=False):
     """
     Encode sentences in the list X. Each entry will return a vector

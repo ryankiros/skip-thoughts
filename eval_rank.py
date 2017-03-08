@@ -2,7 +2,6 @@
 Evaluation code for image-sentence ranking
 '''
 import numpy as np
-import skipthoughts
 
 import theano
 import theano.tensor as tensor
