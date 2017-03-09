@@ -1,11 +1,11 @@
 # Dataset handler for binary classification tasks (MR, CR, SUBJ, MQPA)
 
 import numpy as np
-import skipthoughts
 from numpy.random import RandomState
+import os.path
 
 
-def load_data(model, name, loc='./data/', seed=1234):
+def load_data(encoder, name, loc='./data/', seed=1234):
     """
     Load one of MR, CR, SUBJ or MPQA
     """
@@ -24,7 +24,7 @@ def load_data(model, name, loc='./data/', seed=1234):
     z['text'] = text
     z['labels'] = labels
     print 'Computing skip-thought vectors...'
-    features = skipthoughts.encode(model, text, verbose=False)
+    features = encoder.encode(text, verbose=False)
     return z, features
 
 
@@ -33,10 +33,10 @@ def load_rt(loc='./data/'):
     Load the MR dataset
     """
     pos, neg = [], []
-    with open(loc + 'rt-polarity.pos', 'rb') as f:
+    with open(os.path.join(loc, 'rt-polarity.pos'), 'rb') as f:
         for line in f:
             pos.append(line.decode('latin-1').strip())
-    with open(loc + 'rt-polarity.neg', 'rb') as f:
+    with open(os.path.join(loc, 'rt-polarity.neg'), 'rb') as f:
         for line in f:
             neg.append(line.decode('latin-1').strip())
     return pos, neg
@@ -47,10 +47,10 @@ def load_subj(loc='./data/'):
     Load the SUBJ dataset
     """
     pos, neg = [], []
-    with open(loc + 'plot.tok.gt9.5000', 'rb') as f:
+    with open(os.path.join(loc, 'plot.tok.gt9.5000'), 'rb') as f:
         for line in f:
             pos.append(line.decode('latin-1').strip())
-    with open(loc + 'quote.tok.gt9.5000', 'rb') as f:
+    with open(os.path.join(loc, 'quote.tok.gt9.5000'), 'rb') as f:
         for line in f:
             neg.append(line.decode('latin-1').strip())
     return pos, neg
@@ -61,12 +61,12 @@ def load_cr(loc='./data/'):
     Load the CR dataset
     """
     pos, neg = [], []
-    with open(loc + 'custrev.pos', 'rb') as f:
+    with open(os.path.join(loc, 'custrev.pos'), 'rb') as f:
         for line in f:
             text = line.strip()
             if len(text) > 0:
                 pos.append(text)
-    with open(loc + 'custrev.neg', 'rb') as f:
+    with open(os.path.join(loc, 'custrev.neg'), 'rb') as f:
         for line in f:
             text = line.strip()
             if len(text) > 0:
@@ -79,12 +79,12 @@ def load_mpqa(loc='./data/'):
     Load the MPQA dataset
     """
     pos, neg = [], []
-    with open(loc + 'mpqa.pos', 'rb') as f:
+    with open(os.path.join(loc, 'mpqa.pos'), 'rb') as f:
         for line in f:
             text = line.strip()
             if len(text) > 0:
                 pos.append(text)
-    with open(loc + 'mpqa.neg', 'rb') as f:
+    with open(os.path.join(loc, 'mpqa.neg'), 'rb') as f:
         for line in f:
             text = line.strip()
             if len(text) > 0:

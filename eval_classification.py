@@ -11,7 +11,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import KFold
 
 
-def eval_nested_kfold(model, name, loc='./data/', k=10, seed=1234, use_nb=False):
+def eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=False):
     """
     Evaluate features with nested K-fold cross validation
     Outer loop: Held-out evaluation
@@ -21,7 +21,7 @@ def eval_nested_kfold(model, name, loc='./data/', k=10, seed=1234, use_nb=False)
     Options for name are 'MR', 'CR', 'SUBJ' and 'MPQA'
     """
     # Load the dataset and extract features
-    z, features = dataset_handler.load_data(model, name, loc=loc, seed=seed)
+    z, features = dataset_handler.load_data(encoder, name, loc=loc, seed=seed)
 
     scan = [2**t for t in range(0,9,1)]
     npts = len(z['text'])

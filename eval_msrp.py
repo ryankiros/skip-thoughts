@@ -1,28 +1,28 @@
 # Evaluation for MSRP
 
 import numpy as np
-import skipthoughts
 
 from collections import defaultdict
 from nltk.tokenize import word_tokenize
 from numpy.random import RandomState
+import os.path
 from sklearn.cross_validation import KFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score as f1
 
 
-def evaluate(model, k=10, seed=1234, evalcv=True, evaltest=False, use_feats=True):
+def evaluate(encoder, k=10, seed=1234, evalcv=True, evaltest=False, use_feats=True, loc='./data/'):
     """
     Run experiment
     k: number of CV folds
     test: whether to evaluate on test set
     """
     print 'Preparing data...'
-    traintext, testtext, labels = load_data()
+    traintext, testtext, labels = load_data(loc)
 
     print 'Computing training skipthoughts...'
-    trainA = skipthoughts.encode(model, traintext[0], verbose=False)
-    trainB = skipthoughts.encode(model, traintext[1], verbose=False)
+    trainA = encoder.encode(traintext[0], verbose=False)
+    trainB = encoder.encode(traintext[1], verbose=False)
 
     if evalcv:
         print 'Running cross-validation...'
@@ -33,8 +33,8 @@ def evaluate(model, k=10, seed=1234, evalcv=True, evaltest=False, use_feats=True
             C = 4    # Best parameter found from CV (combine-skip with use_feats=True)
 
         print 'Computing testing skipthoughts...'
-        testA = skipthoughts.encode(model, testtext[0], verbose=False)
-        testB = skipthoughts.encode(model, testtext[1], verbose=False)
+        testA = encoder.encode(testtext[0], verbose=False)
+        testB = encoder.encode(testtext[1], verbose=False)
 
         if use_feats:
             train_features = np.c_[np.abs(trainA - trainB), trainA * trainB, feats(traintext[0], traintext[1])]
@@ -55,8 +55,8 @@ def load_data(loc='./data/'):
     """
     Load MSRP dataset
     """
-    trainloc = loc + 'msr_paraphrase_train.txt'
-    testloc = loc + 'msr_paraphrase_test.txt'
+    trainloc = os.path.join(loc, 'msr_paraphrase_train.txt')
+    testloc = os.path.join(loc, 'msr_paraphrase_test.txt')
 
     trainA, trainB, testA, testB = [],[],[],[]
     trainS, devS, testS = [],[],[]

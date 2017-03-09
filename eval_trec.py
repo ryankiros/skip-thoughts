@@ -2,20 +2,20 @@
 Evaluation code for the TREC dataset
 '''
 import numpy as np
-import skipthoughts
+import os.path
 from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import KFold
 from sklearn.utils import shuffle
 
 
-def evaluate(model, k=10, seed=1234, evalcv=True, evaltest=False):
+def evaluate(encoder, k=10, seed=1234, evalcv=True, evaltest=False, loc='./data/'):
     """
     Run experiment
     k: number of CV folds
     test: whether to evaluate on test set
     """
     print 'Preparing data...'
-    traintext, testtext = load_data()
+    traintext, testtext = load_data(loc)
     train, train_labels = prepare_data(traintext)
     test, test_labels = prepare_data(testtext)
     train_labels = prepare_labels(train_labels)
@@ -23,7 +23,7 @@ def evaluate(model, k=10, seed=1234, evalcv=True, evaltest=False):
     train, train_labels = shuffle(train, train_labels, random_state=seed)
 
     print 'Computing training skipthoughts...'
-    trainF = skipthoughts.encode(model, train, verbose=False, use_eos=False)
+    trainF = encoder.encode(train, verbose=False, use_eos=False)
     
     if evalcv:
         print 'Running cross-validation...'
@@ -35,7 +35,7 @@ def evaluate(model, k=10, seed=1234, evalcv=True, evaltest=False):
             C = 128     # Best parameter found from CV
 
         print 'Computing testing skipthoughts...'
-        testF = skipthoughts.encode(model, test, verbose=False, use_eos=False)
+        testF = encoder.encode(test, verbose=False, use_eos=False)
 
         print 'Evaluating...'
         clf = LogisticRegression(C=C)
@@ -49,10 +49,10 @@ def load_data(loc='./data/'):
     Load the TREC question-type dataset
     """
     train, test = [], []
-    with open(loc + 'train_5500.label', 'rb') as f:
+    with open(os.path.join(loc, 'train_5500.label'), 'rb') as f:
         for line in f:
             train.append(line.strip())
-    with open(loc + 'TREC_10.label', 'rb') as f:
+    with open(os.path.join(loc, 'TREC_10.label'), 'rb') as f:
         for line in f:
             test.append(line.strip())
     return train, test
